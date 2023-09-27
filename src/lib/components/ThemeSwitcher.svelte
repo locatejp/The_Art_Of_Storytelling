@@ -1,23 +1,23 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import { themeChange } from 'theme-change'
   import { browser } from '$app/environment'
 
   function handleSwitchDarkMode() {
     darkMode = !darkMode
-    const theme = darkMode ? `dark` : `light`
-    document.documentElement.dataset.theme = theme
+    const theme = setTheme(darkMode)
     localStorage.setItem(`theme`, theme)
   }
 
-  let darkMode = true
+  let darkMode: boolean = true
   if (browser) {
     localStorage.theme === 'light' && (darkMode = false)
+    setTheme(darkMode)
   }
 
-  onMount(() => {
-    themeChange(false)
-  })
+  function setTheme(darkMode: boolean) {
+    const theme = darkMode ? `dark` : `light`
+    document.documentElement.dataset.theme = theme
+    return theme
+  }
 </script>
 
 <button class="btn btn-square btn-ghost">
