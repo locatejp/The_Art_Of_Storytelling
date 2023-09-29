@@ -1,12 +1,17 @@
 <script lang="ts">
-  import SignInWithGoogle from '$lib/components/SignInWithGoogle.svelte'
   import SignUpWithPassword from '$lib/components/SignUpWithPassword.svelte'
+  import SignInWithGoogle from '$lib/components/SignInWithGoogle.svelte'
   import Divider from '$lib/components/Divider.svelte'
-  import CreateAccount from '$lib/components/CreateAccount.svelte'
+  import SignOutBtn from '$lib/components/SignOutBtn.svelte'
+  import { user } from '$lib/firebase'
 </script>
 
 <div class="flex flex-col">
-  <SignUpWithPassword />
-  <Divider />
-  <SignInWithGoogle />
+  {#if $user}
+    <SignOutBtn />
+  {:else}
+    <SignUpWithPassword />
+    <Divider />
+    <SignInWithGoogle />
+  {/if}
 </div>
