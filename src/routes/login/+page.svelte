@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SignUpWithPassword from '$lib/components/SignUpWithPassword.svelte'
+  import SignInWithPassword from '$lib/components/SignInWithPassword.svelte'
   import SignInWithGoogle from '$lib/components/SignInWithGoogle.svelte'
   import Divider from '$lib/components/Divider.svelte'
   import SignOutBtn from '$lib/components/SignOutBtn.svelte'
@@ -17,16 +17,14 @@
 
 <main class="card w-4/6 bg-base-200 mx-auto">
   <div class="card-body items-center text-center">
-    <h1 class="card-title text-5xl m-4">Continue Your Storytelling</h1>
-    <div class="flex flex-col">
+    <h1 class="card-title text-5xl font-bold p-5">
+      Continue Your Storytelling
+    </h1>
+    <div class="flex flex-col w-2/5">
       {#if $user}
         <SignOutBtn {handleSigninError} />
       {:else}
-        <SignUpWithPassword
-          {handleSigninError}
-          {passwordBtnVisible}
-          {togglePassword}
-        />
+        <SignInWithPassword {togglePassword} {passwordBtnVisible} />
         {#if !passwordBtnVisible}
           <Divider />
           <SignInWithGoogle />

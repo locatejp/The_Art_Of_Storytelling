@@ -15,7 +15,7 @@
   }
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col w-2/5">
   {#if $user}
     <h2 class="card-title">Welcome {$user?.displayName || `friend`},</h2>
     <p class="text-center text-success">You are logged in</p>
