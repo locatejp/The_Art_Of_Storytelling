@@ -32,7 +32,7 @@
         console.log({ errorCode, errorMessage })
         const inUse = errorCode.includes(`email-already-in-use`)
         errorMsg = inUse
-          ? `It looks like you usually sign in a different way. Try signing in with Google`
+          ? `Account already created with this email. Try signing in with Google or your password.`
           : `An unknown error occurred. Try again.`
         email = ``
         password = ``
@@ -86,12 +86,12 @@
     <div
       class="join join-vertical space-y-4 lg:space-y-0 lg:join-horizontal lg:space-x-4"
     >
+      <button class="btn btn-outline" on:click={togglePassword}>Back</button>
       <button
         class="btn btn-primary mb-3"
         disabled={!isValidEmail || !isValidPassword}
         on:click|preventDefault={signUpWithPassword}>Submit</button
       >
-      <button class="btn btn-outline" on:click={togglePassword}>Back</button>
     </div>
   {:else}
     <button
