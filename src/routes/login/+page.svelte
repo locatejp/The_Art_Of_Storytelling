@@ -15,20 +15,23 @@
   }
 </script>
 
-<div class="flex flex-col">
-  {#if $user}
-    <h2 class="card-title">Welcome {$user?.displayName || `friend`},</h2>
-    <p class="text-center text-success">You are logged in</p>
-    <a class="btn btn-primary" href="/signup/username">Pick Username</a>
-  {:else}
-    <SignUpWithPassword
-      {handleSigninError}
-      {passwordBtnVisible}
-      {togglePassword}
-    />
-    {#if !passwordBtnVisible}
-      <Divider />
-      <SignInWithGoogle />
-    {/if}
-  {/if}
-</div>
+<main class="card w-4/6 bg-base-200 mx-auto">
+  <div class="card-body items-center text-center">
+    <h1 class="card-title text-5xl m-4">Continue Your Storytelling</h1>
+    <div class="flex flex-col">
+      {#if $user}
+        <SignOutBtn {handleSigninError} />
+      {:else}
+        <SignUpWithPassword
+          {handleSigninError}
+          {passwordBtnVisible}
+          {togglePassword}
+        />
+        {#if !passwordBtnVisible}
+          <Divider />
+          <SignInWithGoogle />
+        {/if}
+      {/if}
+    </div>
+  </div>
+</main>
