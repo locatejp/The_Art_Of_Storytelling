@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment'
+  import { shortcut } from '$lib/JS Helpers/shortcut'
 
   function handleSwitchDarkMode() {
     darkMode = !darkMode
@@ -20,10 +21,17 @@
   }
 </script>
 
-<button class="btn btn-square btn-ghost">
-  <label class="swap swap-rotate w-12 h-12">
-    <input type="checkbox" checked={darkMode} on:click={handleSwitchDarkMode} />
-    <img src="/moon.svg" alt="dark" class="w-8 h-8 swap-on" />
-    <img src="/sun.svg" alt="light" class="w-8 h-8 swap-off" />
-  </label>
-</button>
+<div class="tooltip tooltip-bottom" data-tip="Opt + T">
+  <button class="btn btn-square btn-ghost">
+    <label class="swap swap-rotate w-12 h-12">
+      <input
+        type="checkbox"
+        checked={darkMode}
+        use:shortcut={{ alt: true, code: 'KeyT' }}
+        on:click={handleSwitchDarkMode}
+      />
+      <img src="/moon.svg" alt="dark" class="w-8 h-8 swap-on" />
+      <img src="/sun.svg" alt="light" class="w-8 h-8 swap-off" />
+    </label>
+  </button>
+</div>
