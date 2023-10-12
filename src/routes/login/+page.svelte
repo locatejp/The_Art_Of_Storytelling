@@ -20,16 +20,14 @@
     <h1 class="card-title text-5xl font-bold p-5">
       Continue Your Storytelling
     </h1>
-    <div class="flex flex-col w-2/5">
-      {#if $user}
-        <SignOutBtn {handleSigninError} />
-      {:else}
-        <SignInWithPassword {togglePassword} {passwordBtnVisible} />
-        {#if !passwordBtnVisible}
-          <Divider />
-          <SignInWithGoogle />
-        {/if}
+    {#if $user}
+      <SignOutBtn {handleSigninError} />
+    {:else}
+      <SignInWithPassword {togglePassword} {passwordBtnVisible} />
+      {#if !passwordBtnVisible}
+        <Divider />
+        <SignInWithGoogle />
       {/if}
-    </div>
+    {/if}
   </div>
 </main>

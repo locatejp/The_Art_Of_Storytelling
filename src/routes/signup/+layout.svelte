@@ -5,7 +5,7 @@
 
 <nav class="flex justify-center my-6">
   <ul class="steps">
-    <a href="/signup" class="step step-primary">Sign In</a>
+    <a href="/signup" class="step step-primary">Create Account</a>
     <a
       href="/signup/username"
       class="step"

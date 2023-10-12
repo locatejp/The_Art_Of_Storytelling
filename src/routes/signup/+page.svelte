@@ -15,20 +15,20 @@
   }
 </script>
 
-<div class="flex flex-col w-2/5">
-  {#if $user}
-    <h2 class="card-title">Welcome {$user?.displayName || `friend`},</h2>
-    <p class="text-center text-success">You are logged in</p>
-    <a class="btn btn-primary" href="/signup/username">Pick Username</a>
-  {:else}
-    <SignUpWithPassword
-      {handleSigninError}
-      {passwordBtnVisible}
-      {togglePassword}
-    />
-    {#if !passwordBtnVisible}
-      <Divider />
-      <SignInWithGoogle />
-    {/if}
+{#if $user}
+  <h2 class="card-title">
+    Welcome {$user?.displayName || `friend`},
+  </h2>
+  <p class="text-center text-success">You are logged in</p>
+  <a class="btn btn-primary" href="/signup/username">Pick Username</a>
+{:else}
+  <SignUpWithPassword
+    {handleSigninError}
+    {passwordBtnVisible}
+    {togglePassword}
+  />
+  {#if !passwordBtnVisible}
+    <Divider />
+    <SignInWithGoogle />
   {/if}
-</div>
+{/if}

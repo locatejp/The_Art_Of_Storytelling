@@ -58,7 +58,7 @@
   $: showErrorMsg = Boolean(errorMsg) && email === ``
 </script>
 
-<form class="flex flex-col max-w-screen-md w-full">
+<form class="flex flex-col max-w-screen-md w-2/5">
   <label class="text text-left font-bold mt-2" for="email">Email</label>
   <input
     bind:value={email}

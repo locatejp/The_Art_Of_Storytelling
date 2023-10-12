@@ -1,22 +1,20 @@
 <script lang="ts">
-  import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+  import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
   let email = ''
   let password = ''
   let errorMsg = ''
   export let passwordBtnVisible: Boolean
   export let togglePassword: () => void
 
-  async function signUpWithPassword() {
+  async function signInWithPassword() {
     console.log({ email, password })
     const auth = getAuth()
-    createUserWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        // Signed in
         const user = userCredential.user
         console.log({ user })
         const idToken = await user.getIdToken()
         console.log({ idToken })
-
         const res = await fetch('/api/signin', {
           method: 'POST',
           headers: {
@@ -26,18 +24,12 @@
         })
       })
       .catch((error) => {
-        const errorCode = error.code
-        const errorMessage = error.message
+        const { code: errorCode, message: errorMessage } = error
         console.log({ errorCode, errorMessage })
-        const inUse = errorCode.includes(`email-already-in-use`)
-        errorMsg = inUse
-          ? `Account already created with this email. Try signing in with Google or your password.`
-          : `An unknown error occurred. Try again.`
+
+        errorMsg = `That password didn't work. Please try again.`
         email = ``
         password = ``
-        console.log({ errorMsg })
-        console.log({ email })
-        console.log({ showErrorMsg })
       })
   }
 
@@ -45,14 +37,12 @@
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ // https://emailregex.com/index.html
   const passwordRe =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[a-zA-Z\d!@#$%^&*()_+]{8,16}$/
-  $: emailIsBlank = email === ``
   $: isValidEmail = validEmailRe.test(email)
-  $: passwordIsBlank = password === ``
   $: isValidPassword = passwordRe.test(password)
   $: showErrorMsg = Boolean(errorMsg) && email === ``
 </script>
 
-<form class="flex flex-col max-w-screen-md w-full">
+<form class="flex flex-col max-w-screen-md w-2/5">
   <label class="text text-left font-bold mt-2" for="email">Email</label>
   <input
     bind:value={email}
@@ -77,10 +67,14 @@
       <button class="btn btn-outline" on:click={togglePassword}>Back</button>
       <button
         class="btn btn-primary mb-3"
+        name="submitBtn"
         disabled={!isValidEmail || !isValidPassword}
-        on:click|preventDefault={signUpWithPassword}>Submit</button
+        on:click|preventDefault={signInWithPassword}>Submit</button
       >
     </div>
+    {#if showErrorMsg}
+      <label class="text text-warning" for="submitBtn">{errorMsg}</label>
+    {/if}
   {:else}
     <button
       disabled={!isValidEmail}
@@ -88,8 +82,5 @@
       name="nextBtn"
       on:click={togglePassword}>Next</button
     >
-    {#if showErrorMsg}
-      <label class="text text-warning" for="nextBtn">{errorMsg}</label>
-    {/if}
   {/if}
 </form>
