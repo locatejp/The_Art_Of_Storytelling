@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types'
   import { onMount } from 'svelte'
+  import { enhance } from '$app/forms'
   import { ref, getDownloadURL, uploadBytes } from 'firebase/storage'
   import { user, userData, storage, db } from '$lib/firebase'
   import { updateDoc, doc } from 'firebase/firestore'
@@ -12,11 +13,24 @@
   campfireTaleTitles[Math.floor(Math.random() * campfireTaleTitles.length)]
 
   let previewURL: string
+  let fileInput: string | ArrayBuffer | null | undefined
+  let files: FileList
   let uploading = false
+  let storyTitle: string
+  let storyBody: string
 
   function createPreviewURL(e: any) {
-    const file = e.target.files[0]
+    files = e.target.files
+    console.log({ files })
+    const file = files[0]
+    console.log({ file })
     previewURL = URL.createObjectURL(file)
+    const reader = new FileReader()
+    // reader.readAsDataURL(file)
+    reader.onload = (e) => {
+      fileInput = e.target?.result
+      console.log({ fileInput })
+    }
   }
 
   async function upload(e: any) {
@@ -33,6 +47,8 @@
     await updateDoc(doc(db, 'users', $user!.uid), { photoURL })
     uploading = false
   }
+
+  $: enableSubmit = !Boolean(storyTitle && storyBody)
 
   onMount(() => {
     randomTitle = `${
@@ -54,25 +70,35 @@
         height="800"
       />
     </figure>
-    <input
-      type="file"
-      class="file-input file-input-bordered w-full max-w-xs"
-      on:change={createPreviewURL}
-      name="photoURL"
-      accept="image/png, image/jpeg, image/gif, image/webp"
-    />
-    <input
-      type="text"
-      placeholder={randomTitle}
-      class="input text-3xl font-bold w-full bg-inherit"
-    />
-    <textarea
-      placeholder="It was a dark and stormy night..."
-      class="textarea font-bold w-full bg-inherit"
-    />
-    <div class="card-actions justify-end">
-      <button class="btn btn-primary">Submit</button>
-    </div>
+    <form method="POST" use:enhance>
+      <input
+        type="file"
+        class="file-input file-input-sm w-full max-w-xs"
+        on:change={createPreviewURL}
+        bind:value={fileInput}
+        bind:files
+        name="storyImg"
+        accept="image/png, image/jpeg, image/gif, image/webp"
+      />
+      <input
+        type="text"
+        name="storyTitle"
+        bind:value={storyTitle}
+        placeholder={randomTitle}
+        class="input text-3xl font-bold w-full bg-inherit"
+      />
+      <textarea
+        name="storyBody"
+        bind:value={storyBody}
+        placeholder="It was a dark and stormy night..."
+        class="textarea font-bold w-full bg-inherit"
+      />
+      <div class="card-actions w-full justify-end">
+        <button disabled={enableSubmit} class="btn btn-primary m-1"
+          >Submit</button
+        >
+      </div>
+    </form>
   </div>
 </main>
 <!-- </AuthCheck> -->
