@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types'
   import { onMount } from 'svelte'
+  import { goto } from '$app/navigation'
   import { ref, getDownloadURL, uploadBytes } from 'firebase/storage'
   import { user, userData, storage, db } from '$lib/firebase'
   import { collection, doc, setDoc } from 'firebase/firestore'
@@ -37,6 +38,7 @@
     const storyImgURL = await uploadStoryImg(id)
     await setDoc(newStoryRef, {
       uid,
+      likes: 0,
       username,
       storyTitle,
       timestamp,
@@ -47,6 +49,9 @@
         },
       ],
       storyImgURL,
+    })
+    goto(`/stories/${id}`, {
+      invalidateAll: true,
     })
   }
 
