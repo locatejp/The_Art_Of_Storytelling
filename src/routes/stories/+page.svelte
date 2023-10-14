@@ -38,7 +38,7 @@
     const storyImgURL = await uploadStoryImg(id)
     await setDoc(newStoryRef, {
       uid,
-      likes: 0,
+      likes: [],
       username,
       storyTitle,
       timestamp,
