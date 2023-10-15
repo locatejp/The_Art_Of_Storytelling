@@ -1,5 +1,5 @@
 <script>
-  export let dividerText = 'OR'
+  export let dividerText = ''
 </script>
 
 <div class="divider my-7">{dividerText}</div>

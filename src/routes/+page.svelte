@@ -20,7 +20,7 @@
       <div
         class="join join-vertical space-y-4 lg:space-y-0 lg:join-horizontal lg:space-x-4"
       >
-        {#if user}
+        {#if $user}
           <a class="btn btn-primary" href="/stories">Start A Story</a>
         {:else}
           <a class="btn btn-primary" href="/signup">Become a StoryTeller</a>

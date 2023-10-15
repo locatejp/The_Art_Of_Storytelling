@@ -16,11 +16,11 @@
   let storyTitle: string
   let storyBody: string
 
-  // const sentenceRe = /^(?:[A-Z'"].{8,98}[.!?])(['"])?$/
-  // const titleRe = /^[A-Z'"'].{3,24}/
   $: imagePasses = Boolean(file)
   $: titlePasses = titleRe.test(storyTitle)
   $: storyBodyPasses = sentenceRe.test(storyBody)
+  $: titleTooLong = storyTitle?.length > 25
+  $: bodyTooLong = storyBody?.length > 100
   $: submitDisabled = !imagePasses || !titlePasses || !storyBodyPasses
 
   function createPreviewURL(e: any) {
@@ -93,20 +93,23 @@
         accept="image/png, image/jpeg, image/gif, image/webp"
         class:file-input-success={imagePasses}
       />
+      <!-- placeholder={randomTitle} -->
       <input
         type="text"
         name="storyTitle"
         bind:value={storyTitle}
-        placeholder={randomTitle}
+        placeholder="Story Title"
         class="input text-3xl font-bold w-full bg-inherit"
         class:input-success={titlePasses}
+        class:input-error={titleTooLong}
       />
       <textarea
         name="storyBody"
         bind:value={storyBody}
-        placeholder="It was a dark and stormy night..."
+        placeholder="Opening sentence for your story"
         class="textarea font-bold w-full bg-inherit"
         class:textarea-success={storyBodyPasses}
+        class:textarea-error={bodyTooLong}
       />
       <div class="card-actions w-full justify-end">
         {#if submitDisabled}

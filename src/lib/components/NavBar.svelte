@@ -34,7 +34,7 @@
       <ul
         class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-32"
       >
-        <li><a href="/">Top Stories</a></li>
+        <li><a href="/topstories">Top Stories</a></li>
         {#if $user}
           <li><a href={`/mystories/${$userData?.username}`}>My Stories</a></li>
           <li><a href="/stories">Start A Story</a></li>
