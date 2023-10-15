@@ -7,6 +7,7 @@
   import { collection, doc, setDoc } from 'firebase/firestore'
   import AuthCheck from '$lib/components/AuthCheck.svelte'
   export let data: PageData
+  import { sentenceRe, titleRe } from '$lib/JS Helpers/re'
 
   const { campfireTaleTitles } = data
   let randomTitle = ``
@@ -15,8 +16,8 @@
   let storyTitle: string
   let storyBody: string
 
-  const sentenceRe = /^(?:[A-Z'"].{8,98}[.!?])(['"])?$/
-  const titleRe = /^[A-Z'"'].{3,24}/
+  // const sentenceRe = /^(?:[A-Z'"].{8,98}[.!?])(['"])?$/
+  // const titleRe = /^[A-Z'"'].{3,24}/
   $: imagePasses = Boolean(file)
   $: titlePasses = titleRe.test(storyTitle)
   $: storyBodyPasses = sentenceRe.test(storyBody)
@@ -46,6 +47,7 @@
         {
           timestamp,
           storyBody,
+          uid,
         },
       ],
       storyImgURL,

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { user } from '$lib/firebase'
   export let uid: string | undefined
   export let likes: string[]
   export let storyId: string
@@ -12,13 +13,13 @@
   } from 'firebase/firestore'
 
   async function toggleLike() {
-    if (!uid) {
+    if (!$user) {
       return
     }
 
     const storiesRef = doc(db, `stories`, storyId)
     const storiesSnapshot = await getDoc(storiesRef)
-    const storiesData = await storiesSnapshot.data()
+    const storiesData = storiesSnapshot.data()
     const liveLikes = storiesData?.likes
 
     if (liveLikes?.includes(uid)) {

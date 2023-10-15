@@ -1,20 +1,31 @@
 <script lang="ts">
-  export let profileImg = `default_profile_img`
+  import { db } from '$lib/firebase'
+  import { doc, getDoc } from 'firebase/firestore'
+  export let profileImg = `/default_profile_img.png`
   export let entry: {
-    storyBody: String
+    storyBody: string
     timestamp: Date
+    uid: string
   }
+
+  async function getProfileImg(uid: string) {
+    const snapshot = await getDoc(doc(db, `users/${uid}`))
+    const exists = snapshot.exists()
+    if (!exists) {
+      return
+    }
+    const data = snapshot?.data() || {}
+    const { photoURL } = data
+    if (photoURL) {
+      profileImg = photoURL
+    }
+  }
+  getProfileImg(entry?.uid)
 </script>
 
 <div
-  class="class=stack w-full bg-base-300 flex justify-start p-4 rounded-lg not-prose no-underline"
+  class="w-full bg-base-300 flex justify-start p-2 rounded-lg not-prose no-underline my-1"
 >
-  <img
-    src={`/${profileImg}.png`}
-    alt={profileImg}
-    width="32"
-    height="32"
-    class="w-8"
-  />
-  <span class="text text-base text-white">{entry?.storyBody}</span>
+  <img src={profileImg} alt={profileImg} class="rounded-full h-10 w-10 m-2" />
+  <span class="text text-base flex items-center">{entry?.storyBody}</span>
 </div>
