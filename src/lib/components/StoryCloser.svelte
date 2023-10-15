@@ -34,8 +34,8 @@
 <div
   class="w-full bg-base-300 flex justify-center p-2 rounded-lg not-prose no-underline my-1"
 >
-  <!-- {#if eligibleToPost} -->
-  {#if true}
+  {#if eligibleToPost}
+    <!-- {#if true} -->
     <div class="flex w-full not-prose no-underline">
       <img src={photoURL} alt="profileImg" class="rounded-full h-10 w-10 m-2" />
       <input

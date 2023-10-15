@@ -40,6 +40,7 @@
     await setDoc(newStoryRef, {
       uid,
       likes: [],
+      likedCount: 0,
       username,
       storyTitle,
       timestamp,

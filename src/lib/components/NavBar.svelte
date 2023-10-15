@@ -36,9 +36,9 @@
       >
         <li><a href="/">Top Stories</a></li>
         {#if $user}
-          <li><a href="/">My Stories</a></li>
+          <li><a href={`/mystories/${$userData?.username}`}>My Stories</a></li>
+          <li><a href="/stories">Start A Story</a></li>
         {/if}
-        <li><a href="/stories">Start A Story</a></li>
       </ul>
     </div>
     <a href="/">
