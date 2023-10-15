@@ -27,12 +27,14 @@
       likedCount--
       return await updateDoc(storiesRef, {
         likes: arrayRemove(uid),
+        likedCount,
       })
     }
     liked = true
     likedCount++
     await updateDoc(storiesRef, {
       likes: arrayUnion(uid),
+      likedCount,
     })
   }
 
