@@ -4,6 +4,7 @@
   import Divider from '$lib/components/Divider.svelte'
   import SignOutBtn from '$lib/components/SignOutBtn.svelte'
   import { user } from '$lib/firebase'
+  const dividerText = `OR`
 
   let passwordBtnVisible = false
   console.log({ passwordBtnVisible })
@@ -28,7 +29,13 @@
     {togglePassword}
   />
   {#if !passwordBtnVisible}
-    <Divider />
+    <Divider {dividerText} />
     <SignInWithGoogle />
+    <Divider />
+    <div>
+      Already have an account? <a class="link link-primary" href="/login"
+        >Log in here</a
+      >
+    </div>
   {/if}
 {/if}
