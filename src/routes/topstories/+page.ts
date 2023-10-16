@@ -25,14 +25,15 @@ export let load = (async () => {
   console.log({ data })
 
   const topStoriesQSnapshot = writable<any>(null)
-  topStoriesQSnapshot.set(
-    docs.map((doc) => {
-      return {
-        id: doc?.id,
-        ...doc?.data(),
-      }
-    })
-  )
+  topStoriesQSnapshot.set(snapshot)
+  // topStoriesQSnapshot.set(
+  //   docs.map((doc) => {
+  //     return {
+  //       id: doc?.id,
+  //       ...doc?.data(),
+  //     }
+  //   })
+  // )
   console.log({ topStoriesQSnapshot })
 
   if (empty) {

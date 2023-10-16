@@ -39,7 +39,7 @@
   }
 
   $: liked = uid && likes?.includes(uid)
-  $: likedCount = likes?.length
+  $: likedCount = likes?.length ?? `-`
 </script>
 
 <button on:click={toggleLike} class="btn btn-sm m-1">
