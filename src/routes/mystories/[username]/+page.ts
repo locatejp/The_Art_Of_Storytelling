@@ -5,6 +5,7 @@ import {
   query,
   where,
   orderBy,
+  onSnapshot,
 } from 'firebase/firestore'
 import { db } from '$lib/firebase'
 import { error } from '@sveltejs/kit'
@@ -30,14 +31,13 @@ export let load = (async ({ params }) => {
   console.log({ data })
 
   const myStoriesQSnapshot = writable<any>(null)
-  myStoriesQSnapshot.set(
-    docs.map((doc) => {
-      return {
-        id: doc?.id,
-        ...doc?.data(),
-      }
-    })
-  )
+  myStoriesQSnapshot.set(snapshot)
+  // docs.map((doc) => {
+  //   return {
+  //     id: doc?.id,
+  //     ...doc?.data(),
+  //   }
+  // })
   console.log({ myStoriesQSnapshot })
 
   if (empty) {
