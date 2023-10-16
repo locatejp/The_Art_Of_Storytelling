@@ -42,7 +42,7 @@
   $: likedCount = likes?.length
 </script>
 
-<button on:click={toggleLike} class="btn">
+<button on:click={toggleLike} class="btn btn-sm m-1">
   {#if liked}
     <img src="/heart_filled.png" alt="heart_filled" height="20" width="20" />
   {:else}
