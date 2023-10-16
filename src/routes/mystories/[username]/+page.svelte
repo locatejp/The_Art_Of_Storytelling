@@ -4,7 +4,7 @@
   import MyStoryLink from '$lib/components/MyStoryLink.svelte'
 
   export let data: PageData
-  const { myStoriesQSnapshot } = data
+  $: myStoriesQSnapshot = data.myStoriesQSnapshot
   console.log({ $myStoriesQSnapshot })
   $: handle = `@${$userData?.username}'s `
 </script>

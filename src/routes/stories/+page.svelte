@@ -19,7 +19,7 @@
   $: imagePasses = Boolean(file)
   $: titlePasses = titleRe.test(storyTitle)
   $: storyBodyPasses = sentenceRe.test(storyBody)
-  $: titleTooLong = storyTitle?.length > 25
+  $: titleTooLong = storyTitle?.length > 50
   $: bodyTooLong = storyBody?.length > 100
   $: submitDisabled = !imagePasses || !titlePasses || !storyBodyPasses
 

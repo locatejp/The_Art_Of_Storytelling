@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { user } from '$lib/firebase'
+  import { user, userData } from '$lib/firebase'
 </script>
 
-<div class="hero h-[calc(100vh-64px)] bg-base-100">
+<div class="hero h-[calc(100vh-66px)] bg-base-100">
   <div class="hero-content text-center">
     <div class="max-w-md">
       <h1 class="text-5xl font-bold p-5">It's Storytelling Time</h1>
@@ -22,10 +22,13 @@
       >
         {#if $user}
           <a class="btn btn-primary" href="/stories">Start A Story</a>
+          <a class="btn btn-primary" href="/mystories/{$userData?.username}"
+            >My Stories</a
+          >
         {:else}
           <a class="btn btn-primary" href="/signup">Become a StoryTeller</a>
         {/if}
-        <a class="btn btn-primary m-3" href="/">Read Top Stories</a>
+        <a class="btn btn-primary m-3" href="/">Top Stories</a>
       </div>
     </div>
   </div>
