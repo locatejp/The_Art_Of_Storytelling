@@ -2,7 +2,6 @@
   import SignUpWithPassword from '$lib/components/SignUpWithPassword.svelte'
   import SignInWithGoogle from '$lib/components/SignInWithGoogle.svelte'
   import Divider from '$lib/components/Divider.svelte'
-  import SignOutBtn from '$lib/components/SignOutBtn.svelte'
   import { user } from '$lib/firebase'
   const dividerText = `OR`
 

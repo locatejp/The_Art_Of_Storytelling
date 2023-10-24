@@ -1,5 +1,6 @@
 <script lang="ts">
   import { user, userData } from '$lib/firebase'
+  console.log({ $user })
 </script>
 
 <div class="hero h-[calc(100vh-66px)] bg-base-100">
@@ -20,7 +21,7 @@
       <div
         class="join join-vertical space-y-4 lg:space-y-0 lg:join-horizontal lg:space-x-4"
       >
-        {#if $user}
+        {#if $userData}
           <a class="btn btn-primary" href="/stories">Start A Story</a>
           <a class="btn btn-primary" href="/mystories/{$userData?.username}"
             >My Stories</a
@@ -28,7 +29,7 @@
         {:else}
           <a class="btn btn-primary" href="/signup">Become a StoryTeller</a>
         {/if}
-        <a class="btn btn-primary m-3" href="/">Top Stories</a>
+        <a class="btn btn-primary m-3" href="/topstories">Top Stories</a>
       </div>
     </div>
   </div>

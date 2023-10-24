@@ -1,9 +1,5 @@
 <script lang="ts">
-  import { user } from '$lib/firebase'
-  export let uid: string | undefined
-  export let likes: string[]
-  export let storyId: string
-  import { db } from '$lib/firebase'
+  import { db, user } from '$lib/firebase'
   import {
     arrayRemove,
     arrayUnion,
@@ -11,6 +7,12 @@
     updateDoc,
     getDoc,
   } from 'firebase/firestore'
+  export let likesArr: string[]
+  export let storyId: string
+
+  const uid = $user?.uid
+  $: liked = uid && likesArr?.includes(uid)
+  $: likedCount = likesArr?.length ?? `-`
 
   async function toggleLike() {
     if (!$user) {
@@ -37,9 +39,6 @@
       likedCount,
     })
   }
-
-  $: liked = uid && likes?.includes(uid)
-  $: likedCount = likes?.length ?? `-`
 </script>
 
 <button on:click={toggleLike} class="btn btn-sm m-1">

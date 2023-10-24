@@ -1,11 +1,13 @@
 import {
   collection,
   getDocs,
+  getDoc,
   limit,
   query,
   where,
   orderBy,
-  onSnapshot,
+  or,
+  doc,
 } from 'firebase/firestore'
 import { db } from '$lib/firebase'
 import { error } from '@sveltejs/kit'
@@ -13,11 +15,18 @@ import { writable } from 'svelte/store'
 import type { PageLoad } from './$types'
 
 export let load = (async ({ params }) => {
-  console.log(`Preloading data`)
+  const { username } = params
+  const usernameRef = doc(db, `usernames/${username}`)
+  const usernameDoc = await getDoc(usernameRef).then((doc) => doc.data())
+  console.log({ usernameDoc })
+  const uid = usernameDoc?.uid
   const collectionRef = collection(db, 'stories')
   const q = query(
     collectionRef,
-    where('username', '==', params.username),
+    or(
+      where('username', '==', username),
+      where('likes', 'array-contains', uid)
+    ),
     orderBy('likedCount', 'desc'),
     limit(10)
   )
@@ -25,19 +34,13 @@ export let load = (async ({ params }) => {
   console.log({ snapshot })
   const { empty, docs } = snapshot
   console.log({ empty })
-  const length = docs?.length
-  console.log({ length })
-  const data = docs[0]?.id
-  console.log({ data })
+  // const length = docs?.length
+  // console.log({ length })
+  // const data = docs[0]?.id
+  // console.log({ data })
 
   const myStoriesQSnapshot = writable<any>(null)
   myStoriesQSnapshot.set(snapshot)
-  // docs.map((doc) => {
-  //   return {
-  //     id: doc?.id,
-  //     ...doc?.data(),
-  //   }
-  // })
   console.log({ myStoriesQSnapshot })
 
   if (empty) {
@@ -46,9 +49,5 @@ export let load = (async ({ params }) => {
 
   return {
     myStoriesQSnapshot,
-    // username: data.username,
-    // photoURL: data.photoURL,
-    // bio: data.bio,
-    // links: data.links || [],
   }
 }) satisfies PageLoad
