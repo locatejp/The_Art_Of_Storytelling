@@ -10,7 +10,6 @@
   import { sentenceRe, titleRe } from '$lib/JS Helpers/re'
 
   const { campfireTaleTitles } = data
-  let randomTitle = ``
   let previewURL: string
   let file: File
   let storyTitle: string
@@ -21,7 +20,9 @@
   $: storyBodyPasses = sentenceRe.test(storyBody)
   $: titleTooLong = storyTitle?.length > 50
   $: bodyTooLong = storyBody?.length > 100
-  $: submitDisabled = !imagePasses || !titlePasses || !storyBodyPasses
+  $: submitDisabled =
+    submitting || !imagePasses || !titlePasses || !storyBodyPasses
+  $: submitting = false
 
   function createPreviewURL(e: any) {
     const files = e.target.files
@@ -30,6 +31,7 @@
   }
 
   async function createStory() {
+    submitting = true
     const timestamp = new Date()
     const uid = $user?.uid
     const username = $userData?.username
@@ -53,21 +55,24 @@
       ],
       storyImgURL,
     })
+    submitting = false
     goto(`/stories/${id}`, {
       invalidateAll: true,
     })
   }
 
-  async function uploadStoryImg(id: String) {
-    const storageRef = ref(storage, `stories/${id}/storyImg.png`)
-    const result = await uploadBytes(storageRef, file)
-    return await getDownloadURL(result.ref)
+  function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
-  onMount(() => {
-    randomTitle =
-      campfireTaleTitles[Math.floor(Math.random() * campfireTaleTitles.length)]
-  })
+  async function uploadStoryImg(id: String) {
+    const storageRef = ref(storage, `stories/${id}/storyImg.png`)
+    const metadata = {
+      cacheControl: 'public,max-age=86400',
+    }
+    const result = await uploadBytes(storageRef, file, metadata)
+    return await getDownloadURL(result.ref)
+  }
 </script>
 
 <AuthCheck>
@@ -93,7 +98,6 @@
         accept="image/png, image/jpeg, image/gif, image/webp"
         class:file-input-success={imagePasses}
       />
-      <!-- placeholder={randomTitle} -->
       <input
         type="text"
         name="storyTitle"
@@ -112,19 +116,18 @@
         class:textarea-error={bodyTooLong}
       />
       <div class="card-actions w-full justify-end">
-        {#if submitDisabled}
-          <div class="tooltip" data-tip="Image, title, & sentence required">
-            <button disabled={submitDisabled} class="btn btn-primary m-1"
-              >Submit</button
-            >
-          </div>
-        {:else}
+        <div class="tooltip" data-tip="Image, title, & sentence required">
           <button
             on:click={createStory}
             disabled={submitDisabled}
-            class="btn btn-primary m-1">Submit</button
+            class="btn btn-primary m-1"
+            >{#if submitting}
+              <span class="loading loading-spinner" />
+            {:else}
+              Submit
+            {/if}</button
           >
-        {/if}
+        </div>
       </div>
     </div>
   </main>

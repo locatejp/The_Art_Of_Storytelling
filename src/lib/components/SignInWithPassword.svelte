@@ -1,5 +1,7 @@
 <script lang="ts">
   import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+  import { goto } from '$app/navigation'
+  import { userData } from '$lib/firebase'
   let email = ''
   let password = ''
   let errorMsg = ''
@@ -22,6 +24,7 @@
           },
           body: JSON.stringify({ idToken }),
         })
+        goto(`/mystories/${$userData?.username}`)
       })
       .catch((error) => {
         const { code: errorCode, message: errorMessage } = error

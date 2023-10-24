@@ -1,18 +1,7 @@
 <script lang="ts">
   import ThemeSwitcher from './ThemeSwitcher.svelte'
-  import { auth, user, userData } from '$lib/firebase'
-  import { signOut } from 'firebase/auth'
-  // export let handleSigninError: () => void
-
-  async function signOutSSR() {
-    const res = await fetch('/api/signin', { method: 'DELETE' })
-    await signOut(auth)
-    // handleSigninError()
-  }
-
-  function drawer() {
-    // NEEDED
-  }
+  import { user, userData } from '$lib/firebase'
+  import { signOutSSR } from '$lib/JS Helpers/functions'
 </script>
 
 <div class="navbar bg-base-100">
@@ -69,9 +58,9 @@
           tabindex="-1"
           class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-25"
         >
-          {#if $user}
+          {#if $userData}
             <li>
-              <a class="justify-between"> Profile </a>
+              <a href="/profile/{$userData.username}"> Profile </a>
             </li>
             <li><a>Settings</a></li>
             <li><button on:click={signOutSSR}>Logout</button></li>

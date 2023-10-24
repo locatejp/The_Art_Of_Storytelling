@@ -13,8 +13,13 @@
     previewURL = URL.createObjectURL(file)
     const storageRef = ref(storage, `users/${$user!.uid}/profile.png`)
     console.log({ storageRef })
-    const result = await uploadBytes(storageRef, file)
+    const metadata = {
+      cacheControl: 'public,max-age=300',
+    }
+    const result = await uploadBytes(storageRef, file, metadata)
     console.log({ result })
+    console.log(result.metadata)
+    console.log(result.metadata.cacheControl)
     const photoURL = await getDownloadURL(result.ref)
     console.log({ photoURL })
 
