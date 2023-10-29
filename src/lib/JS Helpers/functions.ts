@@ -9,3 +9,8 @@ export async function signOutSSR() {
     invalidateAll: true,
   })
 }
+
+export function getLoginRedirectUrl(url: URL) {
+  const { pathname, search } = url
+  return `/login?redirectTo=${pathname + search}`
+}

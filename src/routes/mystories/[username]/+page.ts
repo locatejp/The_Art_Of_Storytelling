@@ -21,6 +21,11 @@ export let load = (async ({ params }) => {
   console.log({ usernameDoc })
   const uid = usernameDoc?.uid
   const collectionRef = collection(db, 'stories')
+
+  if (!uid || !username) {
+    throw error(404, 'Page does not exist')
+  }
+
   const q = query(
     collectionRef,
     or(
@@ -32,7 +37,7 @@ export let load = (async ({ params }) => {
   )
   const snapshot = await getDocs(q)
   console.log({ snapshot })
-  const { empty, docs } = snapshot
+  const { empty } = snapshot
   console.log({ empty })
   // const length = docs?.length
   // console.log({ length })
@@ -48,6 +53,7 @@ export let load = (async ({ params }) => {
   }
 
   return {
+    pageUsername: username,
     myStoriesQSnapshot,
   }
 }) satisfies PageLoad

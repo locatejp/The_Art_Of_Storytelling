@@ -18,6 +18,7 @@
   $: storyId = storySnapshot?.id
   $: pageLink = `/stories/${storyId}`
   $: sentence = storyData?.story?.[0]?.storyBody ?? ``
+  $: title = storyData?.storyTitle
   $: storyImgURL = storyData?.storyImgURL ?? `/default_profile_img.png`
   $: storyLength = storyData?.story?.length - 1
   $: ending = storyLength > 1 ? `other entries` : `other entry`
@@ -38,9 +39,18 @@
   </a>
   <Likes {likesArr} {storyId} />
   <a class="w-full flex justify-start" href={pageLink}>
-    <div class="text text-left text-base flex items-center">
-      {sentence}
+    <div class="flex flex-col w-full">
+      <div
+        class="w-full text text-left text-primary-focus text-2xl font-mono font-extrabold tracking-wider"
+      >
+        {title}
+      </div>
+      <div class="flex">
+        <div class="text text-left text-base flex items-center">
+          {sentence}
+        </div>
+        <div class="text text-base italic ps-2">{otherEntries}</div>
+      </div>
     </div>
-    <div class="text text-base italic ps-2">{otherEntries}</div>
   </a>
 </div>

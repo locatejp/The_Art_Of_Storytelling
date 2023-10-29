@@ -1,7 +1,8 @@
 <script lang="ts">
   import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-  import { goto } from '$app/navigation'
   import { userData } from '$lib/firebase'
+  import { page } from '$app/stores'
+  import { goto } from '$app/navigation'
   let email = ''
   let password = ''
   let errorMsg = ''
@@ -24,6 +25,12 @@
           },
           body: JSON.stringify({ idToken }),
         })
+        const { url } = $page
+        const redirectTo = url?.searchParams?.get(`redirectTo`)
+        console.log({ redirectTo })
+        if (redirectTo) {
+          goto(`/${redirectTo.slice(1)}`)
+        }
         goto(`/mystories/${$userData?.username}`)
       })
       .catch((error) => {
