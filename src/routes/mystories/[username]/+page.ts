@@ -39,21 +39,13 @@ export let load = (async ({ params }) => {
   console.log({ snapshot })
   const { empty } = snapshot
   console.log({ empty })
-  // const length = docs?.length
-  // console.log({ length })
-  // const data = docs[0]?.id
-  // console.log({ data })
-
-  const myStoriesQSnapshot = writable<any>(null)
-  myStoriesQSnapshot.set(snapshot)
-  console.log({ myStoriesQSnapshot })
-
   if (empty) {
     throw error(404, 'Page does not exist')
   }
+  const userStoriesQueryDocs = snapshot?.docs
 
   return {
     pageUsername: username,
-    myStoriesQSnapshot,
+    userStoriesQueryDocs,
   }
 }) satisfies PageLoad

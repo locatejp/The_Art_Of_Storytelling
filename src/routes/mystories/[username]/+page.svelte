@@ -4,7 +4,7 @@
   import MyStoryLink from '$lib/components/MyStoryLink.svelte'
 
   export let data: PageData
-  const { myStoriesQSnapshot, pageUsername } = data
+  const { userStoriesQueryDocs, pageUsername } = data
   const uid = $user?.uid
   $: handle = `@${pageUsername}'s `
   $: validID = pageUsername === $userData?.username
@@ -21,7 +21,7 @@
           </h1>
         </div>
       {/if}
-      {#each $myStoriesQSnapshot?.docs as storySnapshot}
+      {#each userStoriesQueryDocs as storySnapshot}
         <MyStoryLink {uid} {storySnapshot} />
       {/each}
     </div>

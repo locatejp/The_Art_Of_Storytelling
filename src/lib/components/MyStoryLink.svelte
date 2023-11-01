@@ -1,19 +1,10 @@
 <script lang="ts">
-  import type {
-    DocumentData,
-    QueryDocumentSnapshot,
-  } from 'firebase-admin/firestore'
-  import { onSnapshot, doc } from 'firebase/firestore'
-  import { db } from '$lib/firebase'
+  import type { QueryDocumentSnapshot } from 'firebase/firestore'
   import Likes from './Likes.svelte'
   export let storySnapshot: QueryDocumentSnapshot
   export let uid: string | undefined
 
-  const docRef = doc(db, `stories/${storySnapshot?.id}`)
-  let storyData: DocumentData | undefined
-  onSnapshot(docRef, (snapshot) => {
-    storyData = snapshot.data()
-  })
+  const storyData = storySnapshot.data()
   $: likesArr = storyData?.likes
   $: storyId = storySnapshot?.id
   $: pageLink = `/stories/${storyId}`

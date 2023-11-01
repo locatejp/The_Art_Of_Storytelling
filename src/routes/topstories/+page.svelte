@@ -5,16 +5,14 @@
 
   export let data: PageData
 
-  const { topStoriesQSnapshot } = data
-  console.log({ $topStoriesQSnapshot })
-  const topStoriesDocs = $topStoriesQSnapshot?.docs
-  console.log(topStoriesDocs.length)
+  const { topStoriesQueryDocs } = data
+  console.log(topStoriesQueryDocs.length)
   const itemsPerPage = 2
-  const totalPages = Math.ceil(topStoriesDocs.length / itemsPerPage)
+  const totalPages = Math.ceil(topStoriesQueryDocs.length / itemsPerPage)
   let currentPage = 1
   $: lowerBound = (currentPage - 1) * itemsPerPage
   $: upperBound = lowerBound + itemsPerPage
-  $: filteredTopStories = topStoriesDocs.filter(
+  $: filteredTopStories = topStoriesQueryDocs.filter(
     (_: any, index: number) => index >= lowerBound && index < upperBound
   )
   const uid = $user?.uid

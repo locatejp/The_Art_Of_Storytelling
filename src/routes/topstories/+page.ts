@@ -1,14 +1,6 @@
-import {
-  collection,
-  getDocs,
-  limit,
-  query,
-  where,
-  orderBy,
-} from 'firebase/firestore'
+import { collection, getDocs, limit, query, orderBy } from 'firebase/firestore'
 import { db } from '$lib/firebase'
 import { error } from '@sveltejs/kit'
-import { writable } from 'svelte/store'
 import type { PageLoad } from './$types'
 
 export let load = (async () => {
@@ -20,15 +12,13 @@ export let load = (async () => {
   const { empty } = snapshot
   console.log({ empty })
 
-  const topStoriesQSnapshot = writable<any>(null)
-  topStoriesQSnapshot.set(snapshot)
-  console.log({ topStoriesQSnapshot })
+  const topStoriesQueryDocs = snapshot?.docs
 
   if (empty) {
     throw error(404, 'Page does not exist')
   }
 
   return {
-    topStoriesQSnapshot,
+    topStoriesQueryDocs,
   }
 }) satisfies PageLoad
