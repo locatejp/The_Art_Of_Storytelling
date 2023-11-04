@@ -1,17 +1,18 @@
 <script lang="ts">
-  import type { DocumentData } from 'firebase-admin/firestore'
+  import type { DocumentData, Unsubscribe } from 'firebase/firestore'
   import { onSnapshot, doc } from 'firebase/firestore'
   import { db } from '$lib/firebase'
   import Likes from './Likes.svelte'
   import { onDestroy } from 'svelte'
   export let storyId: string
 
-  let storyData: DocumentData | undefined, unsubscribe: any
+  let storyData: DocumentData | undefined, unsubscribe: Unsubscribe
   $: setStory(storyId)
   $: likesArr = storyData?.likes
   $: storyId = storyId
   $: pageLink = `/stories/${storyId}`
   $: sentence = storyData?.story?.[0]?.storyBody ?? ``
+  $: storyTitle = storyData?.storyTitle || `...`
   $: storyImgURL = storyData?.storyImgURL ?? `/default_profile_img.png`
   $: storyLength = storyData?.story?.length - 1
   $: ending = storyLength > 1 ? `other entries` : `other entry`
@@ -42,10 +43,17 @@
     />
   </a>
   <Likes {likesArr} {storyId} />
-  <a class="w-full flex justify-start" href={pageLink}>
-    <div class="text text-left text-base flex items-center">
-      {sentence}
+  <a class="w-full" href={pageLink}>
+    <div class="flex flex-col text-start">
+      <div class="text-primary text-2xl tracking-widest font-bold">
+        {storyTitle}
+      </div>
+      <div class="flex justify-start">
+        <div class="text text-left text-base flex items-center">
+          {sentence}
+        </div>
+        <div class="text text-base italic ps-2">{otherEntries}</div>
+      </div>
     </div>
-    <div class="text text-base italic ps-2">{otherEntries}</div>
   </a>
 </div>
