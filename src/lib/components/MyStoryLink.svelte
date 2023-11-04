@@ -1,21 +1,15 @@
 <script lang="ts">
-  import type {
-    DocumentData,
-    QueryDocumentSnapshot,
-  } from 'firebase-admin/firestore'
+  import type { DocumentData } from 'firebase-admin/firestore'
   import { onSnapshot, doc } from 'firebase/firestore'
   import { db } from '$lib/firebase'
   import Likes from './Likes.svelte'
-  export let storySnapshot: QueryDocumentSnapshot
-  export let uid: string | undefined
+  import { onDestroy } from 'svelte'
+  export let storyId: string
 
-  const docRef = doc(db, `stories/${storySnapshot?.id}`)
-  let storyData: DocumentData | undefined
-  onSnapshot(docRef, (snapshot) => {
-    storyData = snapshot.data()
-  })
+  let storyData: DocumentData | undefined, unsubscribe: any
+  $: setStory(storyId)
   $: likesArr = storyData?.likes
-  $: storyId = storySnapshot?.id
+  $: storyId = storyId
   $: pageLink = `/stories/${storyId}`
   $: sentence = storyData?.story?.[0]?.storyBody ?? ``
   $: storyImgURL = storyData?.storyImgURL ?? `/default_profile_img.png`
@@ -24,6 +18,17 @@
   $: otherEntries = Boolean(storyLength && ending)
     ? `+ ${storyLength} ${ending}`
     : ``
+
+  function setStory(storySnapshot: string) {
+    const docRef = doc(db, `stories/${storySnapshot}`)
+    unsubscribe = onSnapshot(docRef, (snapshot) => {
+      storyData = snapshot.data()
+    })
+  }
+
+  onDestroy(() => {
+    unsubscribe()
+  })
 </script>
 
 <div
