@@ -1,6 +1,4 @@
 <script lang="ts">
-  export let allItemsArr: any[]
-  export let itemsPerPage: number
   export let totalPages: number
   export let activePage: number
   export let endpoint: string

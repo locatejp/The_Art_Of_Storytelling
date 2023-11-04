@@ -6,7 +6,7 @@
   import { page } from '$app/stores'
 
   export let data: PageData
-  const { myStoriesQueryDocs } = data
+  const { myStoriesQueryDocs, myStoriesDataArr } = data
   const username = $userData?.username
   let allItemsArr = myStoriesQueryDocs?.docs.map((item: { id: any }) => item.id)
   const handle = `@${username}'s `
@@ -21,7 +21,7 @@
   function setItemsArray(activePage: number) {
     const start = (activePage - 1) * itemsPerPage
     const end = start + itemsPerPage
-    activeArr = allItemsArr.slice(start, end)
+    activeArr = myStoriesDataArr.slice(start, end).map((item) => item?.storyId)
   }
 </script>
 
@@ -38,12 +38,6 @@
     {#each activeArr as storyId}
       <MyStoryLink {storyId} />
     {/each}
-    <Pagination
-      {totalPages}
-      {allItemsArr}
-      {itemsPerPage}
-      {activePage}
-      {endpoint}
-    />
+    <Pagination {totalPages} {activePage} {endpoint} />
   </div>
 </main>
