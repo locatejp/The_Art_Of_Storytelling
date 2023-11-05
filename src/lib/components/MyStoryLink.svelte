@@ -10,7 +10,7 @@
   $: setStory(storyId)
   $: likesArr = storyData?.likes
   $: storyData = storyData
-  $: pageLink = `/stories/${storyData}`
+  $: pageLink = `/stories/${storyId}`
   $: sentence = storyData?.story?.[0]?.storyBody ?? ``
   $: storyTitle = storyData?.storyTitle || `...`
   $: storyImgURL = storyData?.storyImgURL ?? `/default_profile_img.png`
