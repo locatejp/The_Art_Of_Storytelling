@@ -4,8 +4,8 @@
   export let swapOffLabel = ``
 </script>
 
-<label class="swap swap-flip text-2xl">
-  <input on:click={handleSwapClick} type="checkbox" />
+<label class="absolute m-2 swap swap-flip text-xl">
+  <input checked={true} on:click={handleSwapClick} type="checkbox" />
   <div class="swap-on">{swapOnLabel}</div>
   <div class="swap-off">{swapOffLabel}</div>
 </label>

@@ -14,7 +14,7 @@
   let searchContent = `storyTitle`
   const swapOnLabel = `Titles`
   const swapOffLabel = `Stories`
-  const itemsPerPage = 2
+  const itemsPerPage = 3
   const endpoint = `/topstories`
 
   $: totalPages = Math.ceil(filteredStoriesArr?.length / itemsPerPage)
@@ -59,8 +59,9 @@
 <main class="card w-5/6 bg-base-200 mx-auto shadow-xl">
   <div class="card-body items-center text-center">
     <h1 class="card-title text-5xl font-bold p-5">Top Stories</h1>
-    <SearchBar bind:searchValue {handleSearchChange} {showPrimaryBorder} />
-    <Swap {handleSwapClick} {swapOnLabel} {swapOffLabel} />
+    <SearchBar bind:searchValue {handleSearchChange} {showPrimaryBorder}>
+      <Swap {handleSwapClick} {swapOnLabel} {swapOffLabel} />
+    </SearchBar>
     {#each filteredIdArr as storyId}
       <MyStoryLink {storyId} />
     {/each}

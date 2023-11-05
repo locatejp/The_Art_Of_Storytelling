@@ -8,6 +8,7 @@ import {
   orderBy,
   or,
   doc,
+  Timestamp,
 } from 'firebase/firestore'
 import { db } from '$lib/firebase'
 import { error } from '@sveltejs/kit'
@@ -35,13 +36,25 @@ export let load = (async ({ params }) => {
     throw error(404, 'Page does not exist')
   }
 
+  type sentenceItem = {
+    storyBody: string
+    timestamp: Timestamp
+    uid: string
+  }
+
   const storiesDataArr = myStoriesQueryDocs?.docs?.map((story) => {
     const storyData = story.data()
     const storyId = story?.id
+    const storyFullBody = storyData.story.reduce(
+      (fullBodyString: string, sentenceItem: sentenceItem) =>
+        (fullBodyString += `${sentenceItem.storyBody} `),
+      ``
+    )
     return {
       storyId,
       ...storyData,
       storyTitle: storyData.storyTitle,
+      storyFullBody,
     }
   })
 
