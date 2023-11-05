@@ -6,29 +6,33 @@
   import { page } from '$app/stores'
 
   export let data: PageData
-  let { topStoriesSnapshot, topStoriesDataArr } = data
-  console.log({ topStoriesDataArr })
-  // let allItemsArr = topStoriesSnapshot?.docs.map((item: { id: any }) => item.id)
-
+  let { storiesDataArr } = data
+  let filteredStoriesArr = storiesDataArr
+  let filteredIdArr = storiesDataArr.map((item) => item?.storyId)
+  let searchValue = ``
   const itemsPerPage = 2
   const endpoint = `/topstories`
-  $: totalPages = Math.ceil(topStoriesDataArr?.length / itemsPerPage)
-  $: activePage = Number($page.url?.searchParams?.get(`pageId`)) || 1
-  $: setItemsArray(activePage)
 
-  $: searchValue = ``
-  function handleSearchChange(e: any) {
-    const { data } = e
-    console.log({ data })
-  }
+  $: totalPages = Math.ceil(filteredStoriesArr?.length / itemsPerPage)
+  $: activePage = Number($page.url?.searchParams?.get(`pageId`)) || 1
+  $: setItemsArray(activePage, filteredStoriesArr)
   $: showPrimaryBorder = Boolean(searchValue)
 
-  let activeArr: any[] = []
-  function setItemsArray(activePage: number) {
+  function handleSearchChange() {
+    filteredStoriesArr = storiesDataArr.filter((story) =>
+      story.storyTitle?.toLowerCase()?.includes(searchValue?.toLowerCase())
+    )
+    filteredIdArr = filteredStoriesArr
+      ?.slice(0, itemsPerPage)
+      ?.map((item) => item?.storyId)
+  }
+
+  function setItemsArray(activePage: number, filteredStoriesArr: any[]) {
     const start = (activePage - 1) * itemsPerPage
     const end = start + itemsPerPage
-    activeArr = topStoriesDataArr.slice(start, end).map((item) => item?.storyId)
-    console.log({ activeArr })
+    filteredIdArr = filteredStoriesArr
+      .slice(start, end)
+      .map((item) => item?.storyId)
   }
 </script>
 
@@ -36,7 +40,7 @@
   <div class="card-body items-center text-center">
     <h1 class="card-title text-5xl font-bold p-5">Top Stories</h1>
     <SearchBar bind:searchValue {handleSearchChange} {showPrimaryBorder} />
-    {#each activeArr as storyId}
+    {#each filteredIdArr as storyId}
       <MyStoryLink {storyId} />
     {/each}
   </div>

@@ -4,9 +4,6 @@
   import { db } from '$lib/firebase'
   import Likes from './Likes.svelte'
   import { onDestroy } from 'svelte'
-  // export let storyItem: any
-  // console.log({ storyItem })
-  // const storyId = storyItem?.storyId
   export let storyId: string
 
   let storyData: DocumentData | undefined, unsubscribe: Unsubscribe

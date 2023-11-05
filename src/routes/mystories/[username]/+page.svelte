@@ -3,25 +3,39 @@
   import { userData } from '$lib/firebase'
   import MyStoryLink from '$lib/components/MyStoryLink.svelte'
   import Pagination from '$lib/components/Pagination.svelte'
+  import SearchBar from '$lib/components/SearchBar.svelte'
   import { page } from '$app/stores'
 
   export let data: PageData
-  const { myStoriesQueryDocs, myStoriesDataArr } = data
-  const username = $userData?.username
-  let allItemsArr = myStoriesQueryDocs?.docs.map((item: { id: any }) => item.id)
-  const handle = `@${username}'s `
-
+  const { storiesDataArr } = data
+  let filteredStoriesArr = storiesDataArr
+  let filteredIdArr = storiesDataArr.map((item) => item?.storyId)
+  let searchValue = ``
   const itemsPerPage = 2
+  const username = $userData?.username
+  const handle = `@${username}'s `
   const endpoint = `/mystories/${username}`
-  $: totalPages = Math.ceil(allItemsArr?.length / itemsPerPage)
-  $: activePage = Number($page.url?.searchParams?.get(`pageId`)) || 1
-  $: setItemsArray(activePage)
 
-  let activeArr: any[] = []
-  function setItemsArray(activePage: number) {
+  $: totalPages = Math.ceil(filteredStoriesArr?.length / itemsPerPage)
+  $: activePage = Number($page.url?.searchParams?.get(`pageId`)) || 1
+  $: setItemsArray(activePage, filteredStoriesArr)
+  $: showPrimaryBorder = Boolean(searchValue)
+
+  function handleSearchChange() {
+    filteredStoriesArr = storiesDataArr.filter((story) =>
+      story.storyTitle?.toLowerCase()?.includes(searchValue?.toLowerCase())
+    )
+    filteredIdArr = filteredStoriesArr
+      ?.slice(0, itemsPerPage)
+      ?.map((item) => item?.storyId)
+  }
+
+  function setItemsArray(activePage: number, filteredStoriesArr: any[]) {
     const start = (activePage - 1) * itemsPerPage
     const end = start + itemsPerPage
-    activeArr = myStoriesDataArr.slice(start, end).map((item) => item?.storyId)
+    filteredIdArr = filteredStoriesArr
+      .slice(start, end)
+      .map((item) => item?.storyId)
   }
 </script>
 
@@ -35,7 +49,8 @@
         </h1>
       </div>
     {/if}
-    {#each activeArr as storyId}
+    <SearchBar bind:searchValue {handleSearchChange} {showPrimaryBorder} />
+    {#each filteredIdArr as storyId}
       <MyStoryLink {storyId} />
     {/each}
     <Pagination {totalPages} {activePage} {endpoint} />

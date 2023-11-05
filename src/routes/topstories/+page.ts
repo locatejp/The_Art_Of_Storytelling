@@ -13,17 +13,17 @@ export let load = (async () => {
     throw error(404, 'Page does not exist')
   }
 
-  const topStoriesDataArr = topStoriesSnapshot?.docs?.map((story) => {
+  const storiesDataArr = topStoriesSnapshot?.docs?.map((story) => {
     const storyData = story.data()
     const storyId = story?.id
     return {
       storyId,
       ...storyData,
+      storyTitle: storyData.storyTitle,
     }
   })
 
   return {
-    topStoriesSnapshot,
-    topStoriesDataArr,
+    storiesDataArr,
   }
 }) satisfies PageLoad
