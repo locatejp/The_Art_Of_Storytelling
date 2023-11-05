@@ -1,19 +1,19 @@
 <script lang="ts">
   import type { PageData } from './$types'
-  import { onMount } from 'svelte'
   import { goto } from '$app/navigation'
   import { ref, getDownloadURL, uploadBytes } from 'firebase/storage'
   import { user, userData, storage, db } from '$lib/firebase'
   import { collection, doc, setDoc } from 'firebase/firestore'
   import AuthCheck from '$lib/components/AuthCheck.svelte'
+  import Tooltip from '$lib/components/Tooltip.svelte'
   export let data: PageData
   import { sentenceRe, titleRe } from '$lib/JS Helpers/re'
 
-  const { campfireTaleTitles } = data
   let previewURL: string
   let file: File
   let storyTitle: string
   let storyBody: string
+  const tooltipText = `Image, title, & sentence required`
 
   $: imagePasses = Boolean(file)
   $: titlePasses = titleRe.test(storyTitle)
@@ -35,7 +35,6 @@
     const timestamp = new Date()
     const uid = $user?.uid
     const username = $userData?.username
-
     const newStoryRef = doc(collection(db, `stories`))
     const { id } = newStoryRef
     const storyImgURL = await uploadStoryImg(id)
@@ -53,16 +52,13 @@
           uid,
         },
       ],
+      storyLength: 1,
       storyImgURL,
     })
     submitting = false
     goto(`/stories/${id}`, {
       invalidateAll: true,
     })
-  }
-
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
   async function uploadStoryImg(id: String) {
@@ -116,7 +112,7 @@
         class:textarea-error={bodyTooLong}
       />
       <div class="card-actions w-full justify-end">
-        <div class="tooltip" data-tip="Image, title, & sentence required">
+        <Tooltip showTooltip={submitDisabled} {tooltipText}>
           <button
             on:click={createStory}
             disabled={submitDisabled}
@@ -127,7 +123,7 @@
               Submit
             {/if}</button
           >
-        </div>
+        </Tooltip>
       </div>
     </div>
   </main>
