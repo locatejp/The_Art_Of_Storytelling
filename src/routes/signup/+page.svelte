@@ -29,7 +29,7 @@
   />
   {#if !passwordBtnVisible}
     <Divider {dividerText} />
-    <SignInWithGoogle />
+    <SignInWithGoogle signupType={`up`} />
     <Divider />
     <div>
       Already have an account? <a class="link link-primary" href="/login"

@@ -81,7 +81,7 @@
   {:else}
     <button
       disabled={!isValidEmail}
-      class="btn btn-primary"
+      class="btn btn-outline btn-primary rounded-full"
       name="nextBtn"
       on:click={togglePassword}>Next</button
     >

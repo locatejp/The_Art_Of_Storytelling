@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+  import BackArrow from './BackArrow.svelte'
   let email = ''
   let password = ''
   let errorMsg = ''
@@ -58,8 +59,16 @@
   $: showErrorMsg = Boolean(errorMsg) && email === ``
 </script>
 
-<form class="flex flex-col max-w-screen-md w-2/5">
-  <label class="text text-left font-bold mt-2" for="email">Email</label>
+<form class="relative flex flex-col max-w-screen-md w-2/5">
+  {#if passwordBtnVisible}
+    <button
+      class="absolute mx-3 mt-3 right-full btn btn-circle btn-xs"
+      on:click={togglePassword}
+    >
+      <BackArrow />
+    </button>
+  {/if}
+  <label class="text text-left font-bold mt-2" for="email">Email </label>
   <input
     bind:value={email}
     name="email"
@@ -86,9 +95,8 @@
     <div
       class="join join-vertical space-y-4 lg:space-y-0 lg:join-horizontal lg:space-x-4"
     >
-      <button class="btn btn-outline" on:click={togglePassword}>Back</button>
       <button
-        class="btn btn-primary mb-3"
+        class="btn btn-outline btn-primary mb-3"
         disabled={!isValidEmail || !isValidPassword}
         on:click|preventDefault={signUpWithPassword}>Submit</button
       >
@@ -96,7 +104,7 @@
   {:else}
     <button
       disabled={!isValidEmail}
-      class="btn btn-primary"
+      class="btn btn-outline btn-primary rounded-full"
       name="nextBtn"
       on:click={togglePassword}>Next</button
     >
