@@ -5,7 +5,6 @@
   let email = ``
   let submitting = false
   $: isValidEmail = validEmailRe.test(email)
-  export let data: PageData
   export let form: ActionData
 
   function submitClicked() {
