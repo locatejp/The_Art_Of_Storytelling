@@ -2,4 +2,4 @@
   export let dividerText = ''
 </script>
 
-<div class="divider my-7">{dividerText}</div>
+<div class="divider my-5">{dividerText}</div>

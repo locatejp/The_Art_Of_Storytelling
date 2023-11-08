@@ -2,6 +2,8 @@
   import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
   import { goto } from '$app/navigation'
   import { userData } from '$lib/firebase'
+  import BackArrow from './BackArrow.svelte'
+  import { validEmailRe, passwordRe } from '../JS Helpers/re'
   let email = ''
   let password = ''
   let errorMsg = ''
@@ -36,16 +38,20 @@
       })
   }
 
-  const validEmailRe =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ // https://emailregex.com/index.html
-  const passwordRe =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[a-zA-Z\d!@#$%^&*()_+]{8,16}$/
   $: isValidEmail = validEmailRe.test(email)
   $: isValidPassword = passwordRe.test(password)
   $: showErrorMsg = Boolean(errorMsg) && email === ``
 </script>
 
-<form class="flex flex-col max-w-screen-md w-2/5">
+<form class="relative flex flex-col max-w-screen-md w-2/5">
+  {#if passwordBtnVisible}
+    <button
+      class="absolute mx-3 mt-3 right-full btn btn-circle btn-xs"
+      on:click={togglePassword}
+    >
+      <BackArrow />
+    </button>
+  {/if}
   <label class="text text-left font-bold mt-2" for="email">Email</label>
   <input
     bind:value={email}
@@ -67,9 +73,9 @@
     <div
       class="join join-vertical space-y-4 lg:space-y-0 lg:join-horizontal lg:space-x-4 m-3"
     >
-      <button class="btn btn-outline" on:click={togglePassword}>Back</button>
+      <!-- <button class="btn btn-outline" on:click={togglePassword}>Back</button> -->
       <button
-        class="btn btn-primary mb-3"
+        class="btn btn-outline btn-primary mb-3"
         name="submitBtn"
         disabled={!isValidEmail || !isValidPassword}
         on:click|preventDefault={signInWithPassword}>Submit</button
@@ -84,6 +90,9 @@
       class="btn btn-outline btn-primary rounded-full"
       name="nextBtn"
       on:click={togglePassword}>Next</button
+    >
+    <a class="link link-primary mt-4" href="/forgotpassword"
+      >Forgot Your Password?</a
     >
   {/if}
 </form>
