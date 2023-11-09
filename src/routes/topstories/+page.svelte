@@ -16,9 +16,11 @@
   const swapOffLabel = `Stories`
   const itemsPerPage = 3
   const endpoint = `/topstories`
+  $: paramPage = Number($page.url?.searchParams?.get(`pageId`)) || 1
 
   $: totalPages = Math.ceil(filteredStoriesArr?.length / itemsPerPage)
-  $: activePage = Number($page.url?.searchParams?.get(`pageId`)) || 1
+  $: activePage = searchValue ? 1 : paramPage
+
   $: setItemsArray(activePage, filteredStoriesArr)
   $: showPrimaryBorder = Boolean(searchValue)
 

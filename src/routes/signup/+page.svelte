@@ -20,7 +20,9 @@
     Welcome {$user?.displayName || `friend`},
   </h2>
   <p class="text-center text-success">You are logged in</p>
-  <a class="btn btn-primary" href="/signup/username">Pick Username</a>
+  <a class="btn btn-outline btn-primary" href="/signup/username"
+    >Pick Username</a
+  >
 {:else}
   <SignUpWithPassword
     {handleSigninError}

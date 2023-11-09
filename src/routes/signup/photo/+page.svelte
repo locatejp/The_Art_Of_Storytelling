@@ -59,7 +59,7 @@
             <progress class="progress progress-info w-56 mt-6" />
           {/if}
         </div>
-        <a class="btn btn-primary" href="/{$userData?.username}/edit">Finish</a>
+        <a class="btn btn-primary" href="/stories">Finish</a>
       </form>
     </div>
   </main>

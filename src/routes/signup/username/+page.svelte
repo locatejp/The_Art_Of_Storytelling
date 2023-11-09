@@ -3,6 +3,7 @@
   import AuthCheck from '$lib/components/AuthCheck.svelte'
   import { db, user, userData } from '$lib/firebase'
   import { doc, getDoc, writeBatch } from 'firebase/firestore'
+  import { usernameRe } from '$lib/JS Helpers/re'
   let username = ''
   let loading = false
   let isAvailable = false
@@ -34,16 +35,21 @@
     batch.set(doc(db, `usernames`, username), { uid: $user?.uid })
     batch.set(doc(db, `users`, $user!.uid), {
       username,
+      firstName,
+      lastName,
       installDate: new Date(),
       public: true,
     })
     await batch.commit()
   }
 
-  const re = /^(?=[a-zA-Z0-9._]{3,16}$)(?!.*[_.]{2})[^_.].*[^_.]$/
+  let firstName = ``
+  let lastName = ``
 
+  $: firstNameValid = firstName?.length > 1
+  $: lastNameValid = lastName?.length > 1
   $: isValid =
-    username?.length > 2 && username?.length < 16 && re.test(username)
+    username?.length > 2 && username?.length < 16 && usernameRe.test(username)
   $: isTouched = username?.length > 0
   $: isTaken = !loading && !isAvailable && isValid
 </script>
@@ -59,9 +65,36 @@
       ><button class="btn btn-primary">Upload Photo</button></a
     >
   {:else}
-    <h2>Username</h2>
     <form class="w-3/5" on:submit|preventDefault={confirmUsername}>
+      <label class="label" for="firstname">
+        <span class="label-text">First Name</span>
+      </label>
       <input
+        name="firstname"
+        type="text"
+        placeholder="First name"
+        class="input w-full"
+        bind:value={firstName}
+        class:input-success={firstNameValid}
+      />
+
+      <label class="label" for="lastName">
+        <span class="label-text">Last Name</span>
+      </label>
+      <input
+        name="lastName"
+        type="text"
+        placeholder="Last name"
+        class="input w-full"
+        bind:value={lastName}
+        class:input-success={lastNameValid}
+      />
+
+      <label class="label" for="username">
+        <span class="label-text">Username</span>
+      </label>
+      <input
+        name="username"
         type="text"
         placeholder="Choose a username"
         class="input w-full"
@@ -87,7 +120,7 @@
           <p class="text-warning text-sm">Username already taken</p>
         {/if}
 
-        {#if isAvailable && isValid}
+        {#if firstNameValid && lastNameValid && isAvailable && isValid}
           <button class="btn btn-success">Confirm username @{username}</button>
         {/if}
       </div>

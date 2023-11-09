@@ -26,7 +26,11 @@
           },
           body: JSON.stringify({ idToken }),
         })
-        goto(`/mystories/${$userData?.username}`)
+        if ($userData?.username) {
+          goto(`/mystories/${$userData.username}`)
+        } else {
+          goto(`/topstories`)
+        }
       })
       .catch((error) => {
         const { code: errorCode, message: errorMessage } = error

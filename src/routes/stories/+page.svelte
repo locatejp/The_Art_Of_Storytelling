@@ -116,7 +116,7 @@
           <button
             on:click={createStory}
             disabled={submitDisabled}
-            class="btn btn-primary m-1"
+            class="btn btn-primary btn-outline m-1"
             >{#if submitting}
               <span class="loading loading-spinner" />
             {:else}
