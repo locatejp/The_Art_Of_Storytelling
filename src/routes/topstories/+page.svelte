@@ -52,7 +52,7 @@
 
   function setItemsArray(activePage: number, filteredStoriesArr: any[]) {
     const start = (activePage - 1) * itemsPerPage
-    const end = start + itemsPerPage
+    const end = searchValue !== `` ? undefined : start + itemsPerPage
     filteredIdArr = filteredStoriesArr
       .slice(start, end)
       .map((item) => item?.storyId)
@@ -69,5 +69,7 @@
       <MyStoryLink {storyId} />
     {/each}
   </div>
-  <Pagination {totalPages} {activePage} {endpoint} />
+  {#if searchValue === ``}
+    <Pagination {totalPages} {activePage} {endpoint} />
+  {/if}
 </main>

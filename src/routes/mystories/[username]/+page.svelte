@@ -62,7 +62,7 @@
     filteredStoriesArr: any[] | undefined
   ) {
     const start = (activePage - 1) * itemsPerPage
-    const end = start + itemsPerPage
+    const end = searchValue !== `` ? undefined : start + itemsPerPage
     filteredIdArr = filteredStoriesArr
       ?.slice(start, end)
       ?.map((item) => item?.storyId)
@@ -97,7 +97,9 @@
       {#each filteredIdArr as storyId}
         <MyStoryLink {storyId} />
       {/each}
-      <Pagination {totalPages} {activePage} {endpoint} />
+      {#if searchValue === ``}
+        <Pagination {totalPages} {activePage} {endpoint} />
+      {/if}
     {/if}
   </div>
 </main>
