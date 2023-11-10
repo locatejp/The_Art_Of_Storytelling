@@ -20,12 +20,10 @@
   $: username = $userData?.username
   $: endpoint = `/mystories/${username}`
   $: paramPage = Number($page.url?.searchParams?.get(`pageId`)) || 1
-
   $: totalPages =
     (filteredStoriesArr &&
       Math.ceil(filteredStoriesArr?.length / itemsPerPage)) ||
     1
-  let activePage = paramPage
   $: activePage = Boolean(searchValue) ? 1 : paramPage
   $: setItemsArray(activePage, filteredStoriesArr)
   $: showPrimaryBorder = Boolean(searchValue)
@@ -36,7 +34,6 @@
     searchContent = checked ? `storyTitle` : `storyFullBody`
     searchValue = ``
     handleSearchChange()
-    console.log({ searchContent })
   }
 
   type story = {
