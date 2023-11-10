@@ -4,7 +4,7 @@
 </script>
 
 {#if showTooltip}
-  <div class="tooltip" data-tip={tooltipText}>
+  <div class="tooltip w-full" data-tip={tooltipText}>
     <slot />
   </div>
 {:else}

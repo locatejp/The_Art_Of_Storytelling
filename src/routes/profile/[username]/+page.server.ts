@@ -8,12 +8,14 @@ export let load = (async ({ params, locals }) => {
     throw error(401, 'Unauthorized request!')
   }
   const userDoc = await adminDB.collection('users').doc(dbUID!).get()
-  const { username, bio } = userDoc.data()!
+  const { username, firstName, lastName, photoURL } = userDoc.data()!
   if (username !== params.username) {
     throw error(401, `The username ${params.username} does not belong to you`)
   }
 
   return {
-    // usernameDoc,
+    firstName,
+    lastName,
+    photoURL,
   }
 }) satisfies PageServerLoad
