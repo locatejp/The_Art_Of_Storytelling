@@ -2,9 +2,11 @@
   import type { PageData } from './$types'
   import { db, user, userData, storage } from '$lib/firebase'
   import { ref, getDownloadURL, uploadBytes } from 'firebase/storage'
-  import { updateDoc, doc, getDoc } from 'firebase/firestore'
-  import { onMount } from 'svelte'
+  import { updateDoc, doc, writeBatch, deleteDoc } from 'firebase/firestore'
+  import { deleteUser } from 'firebase/auth'
   import Tooltip from '$lib/components/Tooltip.svelte'
+  import Divider from '$lib/components/Divider.svelte'
+  import { signOutSSR } from '$lib/JS Helpers/functions'
 
   const tooltipText = `Registered email cannot be changed`
   let submitting = false
@@ -12,8 +14,11 @@
   let fileInput: HTMLInputElement
   let previewURL: string
   let uploading = false
+  let showDangerZone = false
+  let showModal = false
+  let errorMsg = ``
   export let data: PageData
-  let { firstName, lastName, photoURL } = data
+  let { firstName, lastName, photoURL, username } = data
 
   $: userEmail = $user?.email || ``
   $: firstNameNotValid = firstName?.length < 1
@@ -61,6 +66,27 @@
   async function updateUserData(data: ProfileData) {
     const ref = doc(db, `users/${$user?.uid}`)
     await updateDoc(ref, data)
+  }
+
+  async function deleteAccount(e: Event) {
+    const batch = writeBatch(db)
+    batch.delete(doc(db, `usernames`, username))
+    batch.delete(doc(db, `users`, $user!.uid))
+    await batch.commit()
+    console.log(`Firestore documents deleted`)
+    try {
+      await deleteUser($user!)
+    } catch (e: any) {
+      const { message } = e
+      if (message.includes(`requires-recent-login`)) {
+        errorMsg = `Recent sign in required.  Please log out, in, and try again.`
+      }
+      showModal = false
+      return
+    }
+    console.log(`User Firebase account deleted`)
+    showModal = false
+    signOutSSR()
   }
 </script>
 
@@ -136,5 +162,51 @@
         {/if}
       </button>
     </form>
+    <button class="w-full" on:click={() => (showDangerZone = !showDangerZone)}>
+      <Divider dividerText={`Danger Zone`} />
+    </button>
+    {#if showDangerZone}
+      <!-- <button on:click={deleteAccount} class="btn btn-error btn-outline mx-auto"
+        >Delete Account</button
+      > -->
+      <!-- Open the modal using ID.showModal() method -->
+      <button
+        class="btn btn-error btn-outline mx-auto"
+        on:click={() => (showModal = true)}>Delete Account</button
+      >
+      {#if errorMsg !== ``}
+        <div class="alert alert-error">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+            /></svg
+          >
+          <span>{errorMsg}</span>
+        </div>
+      {/if}
+      {#if showModal}
+        <div class:modal-open={showModal} class="modal">
+          <div class="modal-box">
+            <h3 class="font-bold text-lg">Really? Delete Your Account?</h3>
+            <p class="py-4">This cannot be undone. Choose wisely.</p>
+            <div class="modal-action">
+              <button class="btn" on:click={() => (showModal = false)}
+                >Cancel</button
+              >
+              <button class="btn btn-error btn-outline" on:click={deleteAccount}
+                >Delete Account</button
+              >
+            </div>
+          </div>
+        </div>
+      {/if}
+    {/if}
   </div>
 </main>

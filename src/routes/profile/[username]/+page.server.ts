@@ -4,6 +4,7 @@ import type { PageServerLoad } from './$types'
 
 export let load = (async ({ params, locals }) => {
   const dbUID = locals.userId
+  console.log({ dbUID })
   if (!dbUID) {
     throw error(401, 'Unauthorized request!')
   }
@@ -14,6 +15,7 @@ export let load = (async ({ params, locals }) => {
   }
 
   return {
+    username,
     firstName,
     lastName,
     photoURL,

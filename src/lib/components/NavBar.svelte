@@ -62,7 +62,6 @@
             <li>
               <a href="/profile/{$userData.username}"> Profile </a>
             </li>
-            <li><a>Settings</a></li>
             <li><button on:click={signOutSSR}>Logout</button></li>
           {:else}
             <li><a href="/login" on:click={signOutSSR}>Login</a></li>
