@@ -16,7 +16,7 @@
   let searchContent = `storyTitle`
   const swapOnLabel = `Titles`
   const swapOffLabel = `Stories`
-  const itemsPerPage = 2
+  const itemsPerPage = 5
   $: username = $userData?.username
   $: endpoint = `/mystories/${username}`
   $: paramPage = Number($page.url?.searchParams?.get(`pageId`)) || 1

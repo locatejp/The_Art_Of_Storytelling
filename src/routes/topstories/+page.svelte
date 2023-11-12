@@ -14,7 +14,7 @@
   let searchContent = `storyTitle`
   const swapOnLabel = `Titles`
   const swapOffLabel = `Stories`
-  const itemsPerPage = 3
+  const itemsPerPage = 5
   const endpoint = `/topstories`
   $: paramPage = Number($page.url?.searchParams?.get(`pageId`)) || 1
   $: totalPages =
