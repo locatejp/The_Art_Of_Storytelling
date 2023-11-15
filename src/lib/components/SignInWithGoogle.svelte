@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { auth } from '$lib/firebase'
+  import { auth, userData } from '$lib/firebase'
   import GoogleLogo from '$lib/svgs/GoogleLogo.svelte'
   import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+  import { goto } from '$app/navigation'
   export let signupType = `in`
 
   async function signInWithGoogle() {
@@ -18,6 +19,12 @@
       },
       body: JSON.stringify({ idToken }),
     })
+
+    if ($userData?.username) {
+      goto(`/mystories/${$userData.username}`)
+    } else {
+      goto(`/topstories`)
+    }
   }
 </script>
 

@@ -21,7 +21,7 @@
       <div
         class="join join-vertical space-y-4 lg:space-y-0 lg:join-horizontal lg:space-x-4"
       >
-        {#if $userData}
+        {#if $user}
           <a class="btn btn-primary" href="/stories">Start A Story</a>
           <a class="btn btn-primary" href="/mystories/{$userData?.username}"
             >My Stories</a

@@ -16,8 +16,8 @@
   const tooltipText = `Image, title, & sentence required`
 
   $: imagePasses = Boolean(file)
-  $: titlePasses = titleRe.test(storyTitle)
-  $: storyBodyPasses = sentenceRe.test(storyBody)
+  $: titlePasses = titleRe.test(storyTitle.trim())
+  $: storyBodyPasses = sentenceRe.test(storyBody.trim())
   $: titleTooLong = storyTitle?.length > 50
   $: bodyTooLong = storyBody?.length > 100
   $: submitDisabled =
@@ -38,6 +38,8 @@
     const newStoryRef = doc(collection(db, `stories`))
     const { id } = newStoryRef
     const storyImgURL = await uploadStoryImg(id)
+    storyTitle = storyTitle.trim()
+    storyBody = storyBody.trim()
     await setDoc(newStoryRef, {
       uid,
       likes: [],
@@ -86,45 +88,46 @@
           height="800"
         />
       </figure>
-      <input
-        type="file"
-        class="file-input file-input-sm w-full max-w-xs"
-        on:change={createPreviewURL}
-        name="storyImg"
-        accept="image/png, image/jpeg, image/gif, image/webp"
-        class:file-input-success={imagePasses}
-      />
-      <input
-        type="text"
-        name="storyTitle"
-        bind:value={storyTitle}
-        placeholder="Story Title"
-        class="input text-3xl font-bold w-full bg-inherit"
-        class:input-success={titlePasses}
-        class:input-error={titleTooLong}
-      />
-      <textarea
-        name="storyBody"
-        bind:value={storyBody}
-        placeholder="Opening sentence for your story"
-        class="textarea font-bold w-full bg-inherit"
-        class:textarea-success={storyBodyPasses}
-        class:textarea-error={bodyTooLong}
-      />
-      <div class="card-actions w-full justify-end">
-        <Tooltip showTooltip={submitDisabled} {tooltipText}>
-          <button
-            on:click={createStory}
-            disabled={submitDisabled}
-            class="btn btn-primary btn-outline m-1"
-            >{#if submitting}
-              <span class="loading loading-spinner" />
-            {:else}
+      <form on:submit|preventDefault={createStory}>
+        <input
+          type="file"
+          class="file-input file-input-sm w-full max-w-xs"
+          on:change={createPreviewURL}
+          name="storyImg"
+          accept="image/png, image/jpeg, image/gif, image/webp"
+          class:file-input-success={imagePasses}
+        />
+        <input
+          type="text"
+          name="storyTitle"
+          bind:value={storyTitle}
+          placeholder="Story Title"
+          class="input text-3xl font-bold w-full bg-inherit mb-2 mt-2"
+          class:input-success={titlePasses}
+          class:input-error={titleTooLong}
+        />
+        <textarea
+          name="storyBody"
+          bind:value={storyBody}
+          placeholder="Opening sentence for your story"
+          class="textarea font-bold w-full bg-inherit"
+          class:textarea-success={storyBodyPasses}
+          class:textarea-error={bodyTooLong}
+        />
+        <div class="card-actions w-full justify-end">
+          <Tooltip showTooltip={submitDisabled} {tooltipText}>
+            <button
+              type="submit"
+              disabled={submitDisabled}
+              class="btn btn-primary btn-outline m-1"
+              >{#if submitting}
+                <span class="loading loading-spinner" />
+              {/if}
               Submit
-            {/if}</button
-          >
-        </Tooltip>
-      </div>
+            </button>
+          </Tooltip>
+        </div>
+      </form>
     </div>
   </main>
 </AuthCheck>

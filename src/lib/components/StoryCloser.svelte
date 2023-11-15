@@ -36,7 +36,10 @@
 >
   {#if eligibleToPost}
     <!-- {#if true} -->
-    <div class="flex w-full not-prose no-underline">
+    <form
+      class="flex w-full not-prose no-underline"
+      on:submit|preventDefault={addSentence}
+    >
       <img src={photoURL} alt="profileImg" class="rounded-full h-10 w-10 m-2" />
       <input
         type="text"
@@ -47,13 +50,13 @@
         class:input-success={storyBodyPasses}
       />
       <button
-        class="btn m-1"
+        class="btn btn-primary btn-outline border-4 m-1"
+        type="submit"
         class:hidden={!storyBodyPasses}
-        on:click={addSentence}
       >
         <img src="/green_check.png" alt="green_check" height="20" width="20" />
       </button>
-    </div>
+    </form>
   {:else}
     Someone else needs to post before you can add to this story!
   {/if}

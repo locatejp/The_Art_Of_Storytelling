@@ -2,6 +2,8 @@
   import type { ActionData, PageData } from './$types'
   import { validEmailRe } from '$lib/JS Helpers/re'
   import { enhance } from '$app/forms'
+  import CircleWithCheck from '$lib/svgs/CircleWithCheck.svelte'
+  import CircleWithX from '$lib/svgs/CircleWithX.svelte'
   let email = ``
   let submitting = false
   $: isValidEmail = validEmailRe.test(email)
@@ -55,34 +57,14 @@
       {/if}
       {#if form?.success}
         <div class="alert alert-success">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="stroke-current shrink-0 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            ><path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            /></svg
+          <CircleWithCheck />
+          <span
+            >Password reset sent<br /> (only if account exists with that email)</span
           >
-          <span>Password reset sent!</span>
         </div>
       {:else if form?.errorMessage}
         <div class="alert alert-error">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="stroke-current shrink-0 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            ><path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-            /></svg
-          >
+          <CircleWithX />
           <span>Error! {form.errorMessage}</span>
         </div>
       {/if}

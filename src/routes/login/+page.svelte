@@ -29,5 +29,11 @@
         <SignInWithGoogle />
       {/if}
     {/if}
+    <Divider />
+    <div>
+      Need to set up an account? <a class="link link-primary" href="/signup"
+        >Sign up here</a
+      >
+    </div>
   </div>
 </main>
