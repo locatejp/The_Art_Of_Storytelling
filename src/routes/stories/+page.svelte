@@ -16,8 +16,8 @@
   const tooltipText = `Image, title, & sentence required`
 
   $: imagePasses = Boolean(file)
-  $: titlePasses = titleRe.test(storyTitle.trim())
-  $: storyBodyPasses = sentenceRe.test(storyBody.trim())
+  $: titlePasses = titleRe.test(storyTitle?.trim())
+  $: storyBodyPasses = sentenceRe.test(storyBody?.trim())
   $: titleTooLong = storyTitle?.length > 50
   $: bodyTooLong = storyBody?.length > 100
   $: submitDisabled =

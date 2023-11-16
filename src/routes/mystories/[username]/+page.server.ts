@@ -54,6 +54,7 @@ export let load = (async ({ params, locals }) => {
 
   const storiesDataArr = myStoriesQueryDocs?.docs?.map((story) => {
     const storyData = story.data()
+    const { storyTitle } = storyData
     const storyId = story?.id
     const storyFullBody = storyData.story.reduce(
       (fullBodyString: string, sentenceItem: sentenceItem) =>
@@ -62,7 +63,7 @@ export let load = (async ({ params, locals }) => {
     )
     return {
       storyId,
-      storyTitle: storyData.storyTitle,
+      storyTitle,
       storyFullBody,
     }
   })

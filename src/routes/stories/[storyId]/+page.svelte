@@ -1,15 +1,25 @@
 <script lang="ts">
   import type { PageData } from './$types'
   import { page } from '$app/stores'
-  import { userData } from '$lib/firebase'
+  import { user, userData } from '$lib/firebase'
   import StoryItem from '$lib/components/StoryItem.svelte'
   import Likes from '$lib/components/Likes.svelte'
   import StoryCloser from '$lib/components/StoryCloser.svelte'
 
   export let data: PageData
-  const { storyData } = data
+  $: ({ storyData, topStoriesSnapshot } = data)
+
+  const userUid = $user?.uid
+  $: storyId = $page.params.storyId
+  $: nextEligibleStory = topStoriesSnapshot?.docs.find((doc) => {
+    const evalStoryId = doc.id
+    const lastAuthorId = doc.data()?.story?.at(-1).uid
+    return lastAuthorId !== userUid && evalStoryId !== storyId
+  })
+  $: nextEligibleStoryId = nextEligibleStory?.id
+  $: nextStoryLink = `/stories/${nextEligibleStoryId}`
+
   $: photoURL = $userData?.photoURL
-  const storyId = $page.params.storyId
   $: likesArr = $storyData?.likes
   $: lastPostUID = $storyData?.story?.at(-1)?.uid
   let rerenderStory = false
@@ -35,7 +45,13 @@
         {#each $storyData?.story as entry}
           <StoryItem {entry} />
         {/each}
-        <StoryCloser {lastPostUID} {photoURL} {storyId} {rerenderStory} />
+        <StoryCloser
+          {lastPostUID}
+          {photoURL}
+          {storyId}
+          {rerenderStory}
+          {nextStoryLink}
+        />
       </ul>
     {/if}
   </div>

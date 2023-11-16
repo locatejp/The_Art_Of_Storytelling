@@ -1,12 +1,13 @@
 <script lang="ts">
   import { sentenceRe } from '$lib/JS Helpers/re'
-  import { user, db } from '$lib/firebase'
+  import { user, userData, db } from '$lib/firebase'
   import { arrayUnion, doc, updateDoc, getDoc } from 'firebase/firestore'
   export let photoURL = '/default_profile_img.png'
   export let storyBody = ``
   export let lastPostUID: string
   export let storyId: string
   export let rerenderStory: boolean
+  export let nextStoryLink: string
 
   $: uid = $user?.uid
   $: storyBodyPasses = sentenceRe.test(storyBody)
@@ -28,6 +29,7 @@
       }),
     })
     rerenderStory = !rerenderStory
+    storyBody = ``
   }
 </script>
 
@@ -35,7 +37,6 @@
   class="w-full bg-base-300 flex justify-center p-2 rounded-lg not-prose no-underline my-1"
 >
   {#if eligibleToPost}
-    <!-- {#if true} -->
     <form
       class="flex w-full not-prose no-underline"
       on:submit|preventDefault={addSentence}
@@ -58,6 +59,18 @@
       </button>
     </form>
   {:else}
-    Someone else needs to post before you can add to this story!
+    <div class="flex flex-col w-full">
+      Someone else needs to post before you can add to this story!
+      <div
+        class="join join-vertical space-y-4 lg:space-y-0 lg:join-horizontal lg:space-x-4 justify-center m-5"
+      >
+        <a class="btn btn-primary btn-outline" href={nextStoryLink}
+          >Add To Another Story</a
+        >
+        <a class="btn btn-primary btn-outline" href="/topstories/"
+          >Top Stories</a
+        >
+      </div>
+    </div>
   {/if}
 </div>

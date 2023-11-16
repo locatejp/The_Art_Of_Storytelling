@@ -1,4 +1,13 @@
-import { doc, getDoc, onSnapshot } from 'firebase/firestore'
+import {
+  doc,
+  getDoc,
+  onSnapshot,
+  collection,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+} from 'firebase/firestore'
 import { db } from '$lib/firebase'
 import { error } from '@sveltejs/kit'
 import { writable } from 'svelte/store'
@@ -22,7 +31,13 @@ export let load = (async ({ params }) => {
   })
   console.log({ storyData })
 
+  const collectionRef = collection(db, 'stories')
+  const q = query(collectionRef, orderBy('likedCount', 'desc'), limit(100))
+  const topStoriesSnapshot = await getDocs(q)
+  console.log({ topStoriesSnapshot })
+
   return {
     storyData,
+    topStoriesSnapshot,
   }
 }) satisfies PageLoad
