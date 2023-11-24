@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { PageData } from './$types'
   import AuthCheck from '$lib/components/AuthCheck.svelte'
   import { db, user, userData } from '$lib/firebase'
   import { doc, getDoc, writeBatch } from 'firebase/firestore'
@@ -60,7 +59,6 @@
       Your username is <span class="text-success">@{$userData.username}</span>
     </p>
     <p class="w-3/5">(Usernames cannot be changed)</p>
-    <!-- <p>Your bio is <span class="text-warning">{$userData.bio}</span></p> -->
     <a href="/signup/photo"
       ><button class="btn btn-primary">Upload Photo</button></a
     >

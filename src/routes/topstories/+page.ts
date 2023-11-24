@@ -34,10 +34,6 @@ export let load = (async () => {
         (fullBodyString += `${sentenceItem.storyBody} `),
       ``
     )
-    // console.log({ storyFullBody })
-    // const storyFullBody = storyData.story.reduce(
-    //   (sentenceItem: sentenceItem) => sentenceItem.storyBody
-    // )
     return {
       storyId,
       ...storyData,

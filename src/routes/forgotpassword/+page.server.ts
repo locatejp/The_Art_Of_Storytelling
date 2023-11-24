@@ -1,10 +1,4 @@
-import type { PageServerLoad } from './$types'
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
-import { error, fail } from '@sveltejs/kit'
-
-export const load = (async () => {
-  return {}
-}) satisfies PageServerLoad
 
 export const actions = {
   default: async ({ request }) => {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types'
-  import { db, user, userData, storage } from '$lib/firebase'
+  import { db, user, storage } from '$lib/firebase'
   import { ref, getDownloadURL, uploadBytes } from 'firebase/storage'
   import { updateDoc, doc, writeBatch, deleteDoc } from 'firebase/firestore'
   import { deleteUser } from 'firebase/auth'
@@ -54,7 +54,6 @@
       lastName,
     }
     await updateUserData(data)
-    // await new Promise((r) => setTimeout(r, 3000))
     submitting = false
     file = null
   }
@@ -167,10 +166,6 @@
       <Divider dividerText={`Danger Zone`} />
     </button>
     {#if showDangerZone}
-      <!-- <button on:click={deleteAccount} class="btn btn-error btn-outline mx-auto"
-        >Delete Account</button
-      > -->
-      <!-- Open the modal using ID.showModal() method -->
       <button
         class="btn btn-error btn-outline mx-auto"
         on:click={() => (showModal = true)}>Delete Account</button

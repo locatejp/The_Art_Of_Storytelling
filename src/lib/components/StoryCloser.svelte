@@ -2,6 +2,7 @@
   import { sentenceRe } from '$lib/JS Helpers/re'
   import { user, userData, db } from '$lib/firebase'
   import { arrayUnion, doc, updateDoc, getDoc } from 'firebase/firestore'
+  import TopStoriesBtn from './TopStoriesBtn.svelte'
   export let photoURL = '/default_profile_img.png'
   export let storyBody = ``
   export let lastPostUID: string
@@ -12,11 +13,7 @@
   $: uid = $user?.uid
   $: storyBodyPasses = sentenceRe.test(storyBody)
   $: eligibleToPost = $user && lastPostUID && lastPostUID !== uid
-  //   console.log(Boolean($user))
-  //   console.log({ lastPostUID })
-  //   console.log($user?.uid)
-  //   console.log(lastPostUID !== $user?.uid)
-  //   console.log({ eligibleToPost })
+  console.log({ $user })
 
   async function addSentence() {
     const timestamp = new Date()
@@ -58,7 +55,7 @@
         <img src="/green_check.png" alt="green_check" height="20" width="20" />
       </button>
     </form>
-  {:else}
+  {:else if $user}
     <div class="flex flex-col w-full">
       Someone else needs to post before you can add to this story!
       <div
@@ -67,10 +64,10 @@
         <a class="btn btn-primary btn-outline" href={nextStoryLink}
           >Add To Another Story</a
         >
-        <a class="btn btn-primary btn-outline" href="/topstories/"
-          >Top Stories</a
-        >
+        <TopStoriesBtn />
       </div>
     </div>
+  {:else}
+    <TopStoriesBtn />
   {/if}
 </div>

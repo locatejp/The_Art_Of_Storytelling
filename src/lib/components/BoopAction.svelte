@@ -14,6 +14,7 @@
 </script>
 
 <!-- trigger onclick so demo works on mobile -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
   on:mouseenter={triggerBoop}
   use:boop={{ isBooped, ...boopParams, setter: setIsBooped }}

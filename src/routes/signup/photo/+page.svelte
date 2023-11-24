@@ -12,16 +12,11 @@
     const file = e.target.files[0]
     previewURL = URL.createObjectURL(file)
     const storageRef = ref(storage, `users/${$user!.uid}/profile.png`)
-    console.log({ storageRef })
     const metadata = {
       cacheControl: 'public,max-age=300',
     }
     const result = await uploadBytes(storageRef, file, metadata)
-    console.log({ result })
-    console.log(result.metadata)
-    console.log(result.metadata.cacheControl)
     const photoURL = await getDownloadURL(result.ref)
-    console.log({ photoURL })
 
     await updateDoc(doc(db, 'users', $user!.uid), { photoURL })
     uploading = false
@@ -56,7 +51,7 @@
           />
           {#if uploading}
             <p>Uploading...</p>
-            <progress class="progress progress-info w-56 mt-6" />
+            <progress class="progress progress-info w-4/5 mx-auto mt-6" />
           {/if}
         </div>
         <a class="btn btn-primary" href="/stories">Finish</a>

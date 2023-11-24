@@ -36,7 +36,10 @@ export let load = (async ({ params }) => {
   const topStoriesSnapshot = await getDocs(q)
   console.log({ topStoriesSnapshot })
 
+  const { storyImgURL } = snapshot.data()
+
   return {
+    storyImgURL,
     storyData,
     topStoriesSnapshot,
   }

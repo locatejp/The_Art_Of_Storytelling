@@ -11,7 +11,7 @@
   }
 </script>
 
-<div class="navbar bg-base-100">
+<div class="navbar">
   <div class="navbar-start">
     <div class="w-full navbar gap-2">
       <div class="flex-none">

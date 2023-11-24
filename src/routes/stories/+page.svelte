@@ -1,12 +1,10 @@
 <script lang="ts">
-  import type { PageData } from './$types'
   import { goto } from '$app/navigation'
   import { ref, getDownloadURL, uploadBytes } from 'firebase/storage'
   import { user, userData, storage, db } from '$lib/firebase'
   import { collection, doc, setDoc } from 'firebase/firestore'
   import AuthCheck from '$lib/components/AuthCheck.svelte'
   import Tooltip from '$lib/components/Tooltip.svelte'
-  export let data: PageData
   import { sentenceRe, titleRe } from '$lib/JS Helpers/re'
 
   let previewURL: string
@@ -19,7 +17,7 @@
   $: titlePasses = titleRe.test(storyTitle?.trim())
   $: storyBodyPasses = sentenceRe.test(storyBody?.trim())
   $: titleTooLong = storyTitle?.length > 50
-  $: bodyTooLong = storyBody?.length > 100
+  $: bodyTooLong = storyBody?.length > 200
   $: submitDisabled =
     submitting || !imagePasses || !titlePasses || !storyBodyPasses
   $: submitting = false

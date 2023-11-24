@@ -14,6 +14,7 @@
   $: nextEligibleStory = topStoriesSnapshot?.docs.find((doc) => {
     const evalStoryId = doc.id
     const lastAuthorId = doc.data()?.story?.at(-1).uid
+    console.log({ lastAuthorId, userUid, evalStoryId, storyId })
     return lastAuthorId !== userUid && evalStoryId !== storyId
   })
   $: nextEligibleStoryId = nextEligibleStory?.id
